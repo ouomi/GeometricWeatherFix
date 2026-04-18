@@ -50,17 +50,17 @@ public class CaiYunWeatherService extends CNWeatherService {
                 "weather20151024",
                 "zUFJoAR2ZVrDy1vF3D07",
                 "V12.5", // RomVersion 改成12.5
-                "12.0", // AppVersion 改成12.0
+                "12070602", // AppVersion 改成12.0
                 false,
                 false,
-                "cancun", //残存的中文拼音
+                "OOO0OOL1", //十分随意哦
                 "",
-                "zh_CN"
+                "zh_cn"
         );
         Observable<CaiYunForecastResult> forecast = mApi.getForecastWeather(
                 String.valueOf(location.getLatitude()),
                 String.valueOf(location.getLongitude()),
-                "zh_CN",
+                "zh_cn",
                 false,
                 "weather20151024",
                 "weathercn:" + location.getCityId(),

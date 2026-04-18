@@ -1,4 +1,12 @@
-# GeometricWeather
+# GeometricWeatherFix
+
+仅在 3.013 版本上进行了微小的修补，使其可以继续正常使用
+
+已创建新的分支：`git switch -c FixFrom3.013 3.013`
+
+以下为原始README.md
+
+### GeometricWeather
 
 [中文](/README.md) - [en](/README-en.md)
 

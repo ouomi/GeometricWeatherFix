@@ -32,4 +32,5 @@ public interface CaiYunApi {
                                                         @Query("appKey") String appKey,
                                                         @Query("locationKey") String locationKey,
                                                         @Query("sign") String sign);
+
 }

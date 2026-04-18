@@ -3,10 +3,13 @@ package wangdaye.com.geometricweather.weather.converters;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -112,7 +115,8 @@ public class CaiyunResultConverter {
                             null,
                             null,
                             null,
-                            forecastResult.precipitation.description
+                            //forecastResult.precipitation.description //原始写法，接口有时候 不返回precipitation 字段了
+                            getPrecipitationDescription(forecastResult)
                     ),
                     getYesterday(mainlyResult),
                     getDailyList(context, mainlyResult.current.pubTime, mainlyResult.forecastDaily),
@@ -136,6 +140,36 @@ public class CaiyunResultConverter {
             e.printStackTrace();
             return new WeatherService.WeatherResultWrapper(null);
         }
+    }
+
+    // 请求：GET https://weatherapi.market.xiaomi.com/wtr-v3/weather/xm/forecast/minutely?...
+    // 需要处理响应为：{"status":-1}
+    private static String getPrecipitationDescription(CaiYunForecastResult forecastResult) {
+        if (forecastResult == null) {
+            Log.e("居然是NULL", "Forecast data is missing or invalid.");
+            return "居然是NULL吗？";
+        }
+
+        if (forecastResult.getStatus() == -1) {
+            System.out.println("status状态为: " + forecastResult.getStatus());
+            return "forecastResult状态为:" + forecastResult.getStatus();
+        }
+
+        if (forecastResult.precipitation == null) {
+            Log.e("居然是NULL", "Forecast data is missing or invalid.");
+            return "居然是NULL吗？";
+        }
+
+        if (forecastResult.precipitation.getStatus() == -1) {
+            System.out.println("内部Precipitation的status状态为: " + forecastResult.precipitation.getStatus());
+            return "内部Precipitation的status为-1";
+        }
+
+        if (forecastResult.precipitation != null) {
+            return forecastResult.precipitation.description;
+        }
+
+        return "这里会是什么呢？";
     }
 
     private static AirQuality getAirQuality(Context context, CaiYunMainlyResult result) {
@@ -216,7 +250,7 @@ public class CaiyunResultConverter {
     private static List<Daily> getDailyList(Context context,
                                             Date publishDate, CaiYunMainlyResult.ForecastDailyBean forecast) {
         List<Daily> dailyList = new ArrayList<>(forecast.weather.value.size());
-        for (int i = 0; i < forecast.weather.value.size(); i ++) {
+        for (int i = 0; i < forecast.weather.value.size(); i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(publishDate);
             calendar.add(Calendar.DATE, i);
@@ -393,7 +427,7 @@ public class CaiyunResultConverter {
                                               Date sunrise, Date sunset,
                                               CaiYunMainlyResult.ForecastHourlyBean forecast) {
         List<Hourly> hourlyList = new ArrayList<>(forecast.weather.value.size());
-        for (int i = 0; i < forecast.weather.value.size(); i ++) {
+        for (int i = 0; i < forecast.weather.value.size(); i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(publishDate);
             calendar.add(Calendar.HOUR_OF_DAY, i);
@@ -442,10 +476,17 @@ public class CaiyunResultConverter {
                                                   String currentWeatherText,
                                                   WeatherCode currentWeatherCode,
                                                   CaiYunForecastResult result) {
+
+        // 非空判断
+        // minutelyList 想得到一个列表，就算是空的也好，就是不能为NULL，否则就会更新天气失败。
+        if (result == null || result.precipitation == null || result.precipitation.value == null) {
+            return new ArrayList<>();
+        }
+
         Date current = result.precipitation.pubTime;
 
         List<Minutely> minutelyList = new ArrayList<>(result.precipitation.value.size());
-        for (int i = 0; i < result.precipitation.value.size(); i ++) {
+        for (int i = 0; i < result.precipitation.value.size(); i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(current);
             calendar.set(Calendar.SECOND, 0);
@@ -578,83 +619,83 @@ public class CaiyunResultConverter {
 
             case "8":
             case "08":
-                return  "中雨";
+                return "中雨";
 
             case "9":
             case "09":
-                return  "大雨";
+                return "大雨";
 
             case "10":
-                return  "暴雨";
+                return "暴雨";
 
             case "11":
-                return  "大暴雨";
+                return "大暴雨";
 
             case "12":
-                return  "特大暴雨";
+                return "特大暴雨";
 
             case "13":
-                return  "阵雪";
+                return "阵雪";
 
             case "14":
-                return  "小雪";
+                return "小雪";
 
             case "15":
-                return  "中雪";
+                return "中雪";
 
             case "16":
-                return  "大雪";
+                return "大雪";
 
             case "17":
-                return  "暴雪";
+                return "暴雪";
 
             case "18":
-                return  "雾";
+                return "雾";
 
             case "19":
-                return  "冻雨";
+                return "冻雨";
 
             case "20":
-                return  "沙尘暴";
+                return "沙尘暴";
 
             case "21":
-                return  "小到中雨";
+                return "小到中雨";
 
             case "22":
-                return  "中到大雨";
+                return "中到大雨";
 
             case "23":
-                return  "大到暴雨";
+                return "大到暴雨";
 
             case "24":
-                return  "暴雨到大暴雨";
+                return "暴雨到大暴雨";
 
             case "25":
-                return  "大暴雨到特大暴雨";
+                return "大暴雨到特大暴雨";
 
             case "26":
-                return  "小到中雪";
+                return "小到中雪";
 
             case "27":
-                return  "中到大雪";
+                return "中到大雪";
 
             case "28":
-                return  "大到暴雪";
+                return "大到暴雪";
 
             case "29":
-                return  "浮尘";
+                return "浮尘";
 
             case "30":
-                return  "扬沙";
+                return "扬沙";
 
             case "31":
-                return  "强沙尘暴";
+                return "强沙尘暴";
 
             case "53":
             case "54":
             case "55":
             case "56":
-                return  "霾";
+                return "霾";
 
             default:
                 return "未知";
@@ -741,7 +782,8 @@ public class CaiyunResultConverter {
     private static String getWindDirection(float degree) {
         if (degree < 0) {
             return "无风向";
-        }if (22.5 < degree && degree <= 67.5) {
+        }
+        if (22.5 < degree && degree <= 67.5) {
             return "东北风";
         } else if (67.5 < degree && degree <= 112.5) {
             return "东风";
@@ -841,3 +883,4 @@ public class CaiyunResultConverter {
         return Color.TRANSPARENT;
     }
 }
+

@@ -38,35 +38,38 @@ public class CaiYunWeatherService extends CNWeatherService {
     @Override
     public void requestWeather(Context context,
                                Location location, @NonNull RequestWeatherCallback callback) {
+
+
         Observable<CaiYunMainlyResult> mainly = mApi.getMainlyWeather(
                 String.valueOf(location.getLatitude()),
                 String.valueOf(location.getLongitude()),
                 location.isCurrentPosition(),
-                "weathercn%3A" + location.getCityId(),
+                // "weathercn%3A" + location.getCityId(), //这是原始写法
+                "weathercn:" + location.getCityId(), // 直接传冒号，不手动传 %3A
                 15,
                 "weather20151024",
                 "zUFJoAR2ZVrDy1vF3D07",
-                "V10.0.1.0.OAACNFH",
-                "10010002",
+                "V12.5", // RomVersion 改成12.5
+                "12.0", // AppVersion 改成12.0
                 false,
                 false,
-                "gemini",
+                "cancun", //残存的中文拼音
                 "",
-                "zh_cn"
+                "zh_CN"
         );
         Observable<CaiYunForecastResult> forecast = mApi.getForecastWeather(
                 String.valueOf(location.getLatitude()),
                 String.valueOf(location.getLongitude()),
-                "zh_cn",
+                "zh_CN",
                 false,
                 "weather20151024",
-                "weathercn%3A" + location.getCityId(),
+                "weathercn:" + location.getCityId(),
                 "zUFJoAR2ZVrDy1vF3D07"
         );
 
         Observable.zip(mainly, forecast, (mainlyResult, forecastResult) ->
-                CaiyunResultConverter.convert(context, location, mainlyResult, forecastResult)
-        ).compose(SchedulerTransformer.create())
+                        CaiyunResultConverter.convert(context, location, mainlyResult, forecastResult)
+                ).compose(SchedulerTransformer.create())
                 .subscribe(new ObserverContainer<>(mCompositeDisposable, new BaseObserver<WeatherResultWrapper>() {
                     @Override
                     public void onSucceed(WeatherResultWrapper wrapper) {

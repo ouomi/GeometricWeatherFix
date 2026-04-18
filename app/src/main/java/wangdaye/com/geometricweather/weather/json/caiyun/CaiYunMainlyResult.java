@@ -29,6 +29,7 @@ public class CaiYunMainlyResult {
     public AqiBeanXX aqi;
     public List<AlertsBean> alerts;
 
+
     public CurrentBean getCurrent() {
         return current;
     }

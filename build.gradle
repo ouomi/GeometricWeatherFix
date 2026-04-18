@@ -2,6 +2,12 @@
 
 buildscript {
     repositories {
+
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        // Scijava 镜像
+        maven { url "https://maven.scijava.org/content/repositories/public/" }
+
         jcenter()
         mavenCentral()
         google()
@@ -19,10 +25,26 @@ buildscript {
 
 allprojects {
     repositories {
+        
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url "https://maven.scijava.org/content/repositories/public/" }
+
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+
+        maven { url "https://maven.scijava.org/content/repositories/public/" }
+
+        maven { url "https://jitpack.io" }
+
         google()
         mavenCentral()
         jcenter()
     }
+
+    //tasks.withType(JavaCompile) {
+    //     options.compilerArgs << "-Xlint:deprecation" << "-Xlint:unchecked"
+    //}
 }
 
 task clean(type: Delete) {

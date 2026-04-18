@@ -8,3 +8,8 @@
 /build
 /captures
 /local.properties
+/trash_for_me
+/Key
+*.hprof
+*.apk
+/app/pub

@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 
 android {
-    compileSdkVersion 30
+    compileSdk 30
     defaultConfig {
         applicationId "wangdaye.com.geometricweather"
         minSdkVersion 19
@@ -60,6 +60,7 @@ android {
         abortOnError false
     }
     sourceSets{
+
         pub {
             java.srcDirs = ["src/bugly", "src/amap", "src/proprietary"]
             manifest.srcFile "proprietary/AndroidManifest.xml"
@@ -74,6 +75,11 @@ android {
         }
         fdroid {
             java.srcDirs = ["src/nobugly", "src/noamap", "src/opensource"]
+        }
+        fix {
+            // 使用 noamap (无高德) 和 opensource (开源版本逻辑)
+            java.srcDirs = ["src/nobugly", "src/noamap","src/opensource"]
+
         }
         test {
             java.srcDir 'test'
@@ -98,9 +104,16 @@ android {
             dimension "store"
             versionNameSuffix "_pub"
         }
+
+        fix {
+            dimension "store"
+            versionNameSuffix "_fix_0.1"
+        }
+
         gplay {
             dimension "store"
             versionNameSuffix "_gplay"
+
             repositories {
                 maven {
                     url "https://dl.bintray.com/qichuan/maven/"
@@ -110,6 +123,7 @@ android {
         fdroid {
             dimension "store"
             versionNameSuffix "_fdroid"
+
         }
     }
 }

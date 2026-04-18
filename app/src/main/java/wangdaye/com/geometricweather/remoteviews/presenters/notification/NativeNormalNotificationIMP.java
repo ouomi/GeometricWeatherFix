@@ -52,19 +52,27 @@ class NativeNormalNotificationIMP extends AbstractRemoteViewsPresenter {
         // create channel.
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            // 先计算出正确的 importance（AI）
+            int importance = hideNotificationIcon
+                    ? NotificationManager.IMPORTANCE_MIN
+                    : NotificationManager.IMPORTANCE_LOW; // 如果你希望图标显示时是高优先级，这里保持 HIGH；如果是低优先级，请改为 LOW（AI）
+
             NotificationChannel channel = new NotificationChannel(
                     GeometricWeather.NOTIFICATION_CHANNEL_ID_NORMALLY,
                     GeometricWeather.getNotificationChannelName(
                             context,
                             GeometricWeather.NOTIFICATION_CHANNEL_ID_NORMALLY
                     ),
-                    hideNotificationIcon
-                            ? NotificationManager.IMPORTANCE_MIN
-                            : NotificationManager.IMPORTANCE_LOW
+                    importance // 直接传入计算好的值（AI）
+                    //hideNotificationIcon
+                    //        ? NotificationManager.IMPORTANCE_MIN
+                    //        : NotificationManager.IMPORTANCE_LOW
             );
             channel.setShowBadge(false);
-            channel.setImportance(hideNotificationIcon
-                    ? NotificationManager.IMPORTANCE_UNSPECIFIED : NotificationManager.IMPORTANCE_HIGH);
+            // 删除 channel.setImportance(...) （AI）
+            // channel.setImportance(hideNotificationIcon
+            //        ? NotificationManager.IMPORTANCE_UNSPECIFIED : NotificationManager.IMPORTANCE_HIGH);
             channel.setLockscreenVisibility(hideNotificationInLockScreen
                     ? NotificationCompat.VISIBILITY_SECRET : NotificationCompat.VISIBILITY_PUBLIC);
             manager.createNotificationChannel(channel);

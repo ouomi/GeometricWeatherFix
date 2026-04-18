@@ -79,10 +79,12 @@ public class NormalNotificationIMP extends AbstractRemoteViewsPresenter {
         boolean canBeCleared = settings.isNotificationCanBeClearedEnabled();
 
         if (settings.getNotificationStyle() == NotificationStyle.NATIVE) {
+            //这里有一个bug
             NativeNormalNotificationIMP.buildNotificationAndSendIt(context, location, temperatureUnit,
                     dayTime, tempIcon, hideNotificationIcon, hideNotificationInLockScreen, canBeCleared);
             return;
         } else if (settings.getNotificationStyle() == NotificationStyle.CITIES) {
+            //这里还有一个
             MultiCityNotificationIMP.buildNotificationAndSendIt(context, locationList, temperatureUnit,
                     dayTime, tempIcon, hideNotificationIcon, hideNotificationInLockScreen, canBeCleared,
                     minimalIcon, customColor, hideBigView);
@@ -99,12 +101,13 @@ public class NormalNotificationIMP extends AbstractRemoteViewsPresenter {
         int subColor = ContextCompat.getColor(context, textColor.getSubTextColorResId());
 
         // build channel.
+        //这里有第一个bug
         NotificationManagerCompat manager = NotificationManagerCompat.from(context);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // 先计算出正确的 importance（AI）
             int importance = hideNotificationIcon
                     ? NotificationManager.IMPORTANCE_MIN
-                    : NotificationManager.IMPORTANCE_HIGH; // 如果你希望图标显示时是高优先级，这里保持 HIGH；如果是低优先级，请改为 LOW（AI）
+                    : NotificationManager.IMPORTANCE_LOW; // 如果你希望图标显示时是高优先级，这里保持 HIGH；如果是低优先级，请改为 LOW（AI）
 
             NotificationChannel channel = new NotificationChannel(
                     GeometricWeather.NOTIFICATION_CHANNEL_ID_NORMALLY,

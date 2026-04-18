@@ -32,7 +32,12 @@ public class AMapLocationService extends LocationService {
         public void onLocationChanged(AMapLocation aMapLocation) {
             cancel();
             if (mLocationCallback != null) {
+                //调试，成功触发：
+                android.util.Log.d("AMapDebug", "成功触发 onLocationChanged triggered");
+
                 if (aMapLocation.getErrorCode() == 0) {
+                    //调试，定位成功：
+                    android.util.Log.i("AMapDebug", "定位成功: " + aMapLocation.getAddress());
                     Result result = new Result(
                             (float) aMapLocation.getLatitude(),
                             (float) aMapLocation.getLongitude()
@@ -49,6 +54,10 @@ public class AMapLocationService extends LocationService {
                     );
                     mLocationCallback.onCompleted(result);
                 } else {
+                    // 调试，定位失败
+                    android.util.Log.e("AMapDebug", "定位失败! ErrorCode: " + aMapLocation.getErrorCode());
+                    android.util.Log.e("AMapDebug", "错误信息: " + aMapLocation.getErrorInfo());
+
                     BuglyHelper.report(
                             new LocationException(
                                     aMapLocation.getErrorCode(),

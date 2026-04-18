@@ -427,7 +427,7 @@ public class CaiyunResultConverter {
                                               Date sunrise, Date sunset,
                                               CaiYunMainlyResult.ForecastHourlyBean forecast) {
         List<Hourly> hourlyList = new ArrayList<>(forecast.weather.value.size());
-        for (int i = 0; i < forecast.weather.value.size(); i++) {
+        for (int i = 1; i < forecast.weather.value.size(); i++) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(publishDate);
             calendar.add(Calendar.HOUR_OF_DAY, i);

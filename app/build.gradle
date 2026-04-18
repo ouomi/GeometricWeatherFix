@@ -11,7 +11,7 @@ android {
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 30013
-        versionName "3.013"
+        versionName "3.013.002"
         multiDexEnabled true
         ndk {
             abiFilters 'armeabi', 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
@@ -107,7 +107,7 @@ android {
 
         fix {
             dimension "store"
-            versionNameSuffix "_fix_0.1"
+            versionNameSuffix "_fix_002"
         }
 
         gplay {

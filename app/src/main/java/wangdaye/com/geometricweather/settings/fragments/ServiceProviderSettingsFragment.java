@@ -113,6 +113,27 @@ public class ServiceProviderSettingsFragment extends AbstractSettingsFragment {
                 }
             }
             setListPreferenceValues(locationService, locationEntries, locationValues);
+        } else if (getBuildFlavor().contains("fix")) {
+            // 1. 强制当前配置为原生定位
+            SettingsManager.getInstance(requireContext()).setLocationProvider(LocationProvider.NATIVE);
+            locationService.setValue("native");
+
+            // 2. 获取“原生定位”的显示名称（为了支持多语言，从原始 entries 中提取）
+            CharSequence nativeEntry = "";
+            CharSequence[] entryValues = locationService.getEntryValues();
+            for (int i = 0; i < entryValues.length; i++) {
+                if ("native".equals(entryValues[i].toString())) {
+                    nativeEntry = locationService.getEntries()[i];
+                    break;
+                }
+            }
+
+            // 3. 直接覆盖选项列表，只留一个
+            locationService.setEntries(new CharSequence[]{ nativeEntry });
+            locationService.setEntryValues(new CharSequence[]{ "native" });
+
+            // 可选：既然只有一个选项，可以把这个设置项设为不可点击，防止用户误点弹出空列表
+            // locationService.setEnabled(false);
         }
 
         locationService.setSummary(getSettingsOptionManager().getLocationProvider().getProviderName(requireContext()));

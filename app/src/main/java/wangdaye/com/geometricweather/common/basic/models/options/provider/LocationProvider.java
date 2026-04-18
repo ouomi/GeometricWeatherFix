@@ -42,6 +42,9 @@ public enum LocationProvider {
             case "baidu":
                 return BAIDU;
 
+            case "native":
+                return NATIVE;
+
             case "amap":
                 return AMAP;
 

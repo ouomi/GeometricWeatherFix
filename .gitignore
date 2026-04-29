@@ -13,3 +13,4 @@
 *.hprof
 *.apk
 /app/pub
+/app/fix
